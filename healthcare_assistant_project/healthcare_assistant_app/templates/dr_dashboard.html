@@ -1,0 +1,163 @@
+<!-- healthcare_assistant_app/templates/healthcare_assistant_app/index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare Assistant - Doctor Dashboard</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .navbar {
+            background-color: #007bff;
+            padding: 15px 20px;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+        }
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin: auto;
+            max-width: 600px;
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .link-container {
+            margin: 20px 0;
+        }
+        .carousel-caption {
+            background: rgba(105, 132, 255, 0.5);
+            padding: 20px;
+            color: #ffffff;
+        }
+        .link-container a {
+            display: block;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            padding: 15px 25px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+        .link-container a:hover {
+            background-color: #0056b3;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #333;
+            text-align: center;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 10px;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        a.button {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+        a.button:hover {
+            background-color: #0056b3;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <a href="#">Healthcare Assistant</a>
+        </div>
+        <div class="nav-links">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'index' %}">Patient Dashboard</a>
+            <a href="{% url 'dr_dashboard' %}">Doctor Dashboard</a>
+
+        </div>
+    </div>
+    <div class="container">
+        <h1>Healthcare Assistant - Doctor Dashboard</h1>
+
+        <h2>Patients</h2>
+        <ul>
+            {% for patient in patients %}
+                <li>{{ patient.name }} - {{ patient.email }} - {{ patient.phone }}</li>
+            {% empty %}
+                <li>No patients found.</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Medications</h2>
+        <ul>
+            {% for medication in medications %}
+                <li>{{ medication.name }} - {{ medication.dosage }} - Schedule: {{ medication.schedule }}</li>
+            {% empty %}
+                <li>No medications found.</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Appointments</h2>
+        <ul>
+            {% for appointment in appointments %}
+                <li>{{ appointment.patient }} - {{ appointment.date }} - {{ appointment.time }}{% if appointment.notes %} - {{ appointment.notes }}{% endif %}</li>
+            {% empty %}
+                <li>No appointments found.</li>
+            {% endfor %}
+        </ul>
+
+        <div class="button-container">
+            <a href="{% url 'doctor' %}" class="button">Add Patients</a>
+            <a href="{% url 'medication_new' %}" class="button">Add Medications</a>
+            {% comment %} <a href="{% url 'schedule_appointment' %}" class="button">Schedule Appointment</a> {% endcomment %}
+        </div>
+    </div>
+</body>
+</html>

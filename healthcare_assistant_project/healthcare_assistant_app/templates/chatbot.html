@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare Assistant Chatbot</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .navbar {
+            background-color: #007bff;
+            padding: 15px 20px;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+        }
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+        .chat-container {
+            width: 90%;
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            overflow: hidden;
+        }
+        .chat-messages {
+            height: 300px;
+            overflow-y: scroll;
+            padding-right: 20px; /* to compensate scrollbar width */
+            border-bottom: 1px solid #ccc;
+        }
+        .message {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-end;
+            margin-bottom: 10px;
+        }
+        .user-message {
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 15px 15px 0 15px;
+            padding: 10px 15px;
+            max-width: 70%;
+            word-wrap: break-word;
+        }
+        .bot-message {
+            background-color: #e0e0e0;
+            color: #333;
+            border-radius: 15px 15px 15px 0;
+            padding: 10px 15px;
+            max-width: 70%;
+            word-wrap: break-word;
+        }
+        .message-container {
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+        .input-container {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+        #user-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+        #send-btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #send-btn:hover {
+            background-color: #0056b3;
+        }
+        .index-link {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .index-link a {
+            text-decoration: none;
+            color: #007bff;
+            padding: 10px 20px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .index-link a:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <a href="#">Healthcare Assistant</a>
+        </div>
+        <div class="nav-links">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'index' %}">Patient Dashboard</a>
+            <a href="{% url 'dr_dashboard' %}">Doctor Dashboard</a>
+        </div>
+    </div>
+    <div class="chat-container">
+        <div class="chat-messages" id="chat-messages">
+            <!-- Messages will be dynamically added here -->
+            <div class="message bot-message message-container">
+                <div class="bot-message">Welcome to Healthcare Assistant Chatbot! How can I assist you today?</div>
+            </div>
+        </div>
+        <form id="chat-form" class="input-container">
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button type="submit" id="send-btn">Send</button>
+        </form>
+        <div class="index-link">
+            <a href="{% url 'index' %}">Go Back</a>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#chat-form').on('submit', function(event) {
+                event.preventDefault();
+                var message = $('#user-input').val().trim();
+                if (message !== '') {
+                    displayUserMessage(message);
+                    sendMessage(message);
+                    $('#user-input').val('');
+                }
+            });
+
+            function displayUserMessage(message) {
+                var html = '<div class="message user-message message-container"><div class="user-message">' + message + '</div></div>';
+                $('#chat-messages').append(html);
+                scrollToBottom();
+            }
+
+            function displayBotMessage(message) {
+                var html = '<div class="message bot-message message-container"><div class="bot-message">' + message + '</div></div>';
+                $('#chat-messages').append(html);
+                scrollToBottom();
+            }
+
+            function scrollToBottom() {
+                $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+            }
+
+            function sendMessage(message) {
+                $.ajax({
+                    url: '{% url "chatbot_view" %}',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ message: message }),
+                    success: function(response) {
+                        displayBotMessage(response.response);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

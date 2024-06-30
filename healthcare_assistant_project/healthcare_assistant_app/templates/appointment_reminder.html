@@ -1,0 +1,26 @@
+<!-- healthcare_assistant_app/templates/email_templates/appointment_reminder.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Appointment Reminder</title>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <a href="#">Healthcare Assistant</a>
+        </div>
+        <div class="nav-links">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'index' %}">Patient Dashboard</a>
+            <a href="{% url 'dr_dashboard' %}">Doctor Dashboard</a>
+
+        </div>
+    </div>
+    <h2>Appointment Reminder</h2>
+    <p>Dear {{ appointment.patient.name }},</p>
+    <p>This is a reminder for your appointment on {{ appointment.date }} at {{ appointment.time }}.</p>
+    <p>Thank you!</p>
+</body>
+</html>
